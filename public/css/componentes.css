@@ -1,0 +1,132 @@
+/* =========================================================
+   Estilos de los componentes React de la portada (Inicio)
+   ========================================================= */
+
+#artcraft-inicio {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#artcraft-inicio .pagina-inicio {
+  flex: 1;
+}
+
+.carrito-icono {
+  position: relative;
+}
+
+.contador-carrito {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  border-radius: 50%;
+  background: #ffb12d;
+  color: #351019;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filtros-categoria {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.chip {
+  padding: 8px 18px;
+  border: 2px solid #8b2510;
+  border-radius: 20px;
+  background: #fffaf0;
+  color: #8b2510;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.chip:hover {
+  background: #8b2510;
+  color: #fffaf0;
+}
+
+.chip.activo {
+  background: #8b2510;
+  color: #fffaf0;
+}
+
+.contador-carrito-resumen {
+  margin-left: 8px;
+  color: #5a1807;
+  font-weight: bold;
+}
+
+.destacados .producto {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.destacados .producto .acciones-producto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.boton-chico {
+  min-height: 38px;
+  padding: 0 18px;
+  font-size: 15px;
+}
+
+.boton-agregar {
+  background-color: #8b2510;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 7px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.boton-agregar:hover {
+  background-color: #d4580b;
+}
+
+.enlaces-inicio {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+  .contenido-hero h1 {
+    font-size: 34px;
+  }
+
+  .descripcion {
+    font-size: 19px;
+  }
+
+  .filtros-categoria {
+    gap: 8px;
+  }
+
+  .contador-carrito-resumen {
+    width: 100%;
+    margin: 8px 0 0;
+  }
+}

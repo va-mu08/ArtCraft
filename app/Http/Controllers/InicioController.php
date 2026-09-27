@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Producto;
+use Illuminate\Contracts\View\View;
+
+class InicioController extends Controller
+{
+    public function index(): View
+    {
+        $destacados = Producto::destacados()
+            ->get()
+            ->map(fn (Producto $producto) => [
+                'id' => $producto->id,
+                'nombre' => $producto->nombre,
+                'descripcion' => $producto->descripcion,
+                'categoria' => $producto->categoria,
+                'precio' => $producto->precio,
+                'imagen' => $producto->imagen_url,
+                'url' => route($producto->ruta_detalle),
+            ])
+            ->values();
+
+        return view('inicio', [
+            'destacados' => $destacados,
+            'categorias' => Producto::select('categoria')->distinct()->pluck('categoria'),
+            'urls' => [
+                'base' => rtrim(asset(''), '/'),
+                'inicio' => route('inicio'),
+                'categorias' => route('categorias'),
+                'carrito' => route('carrito'),
+                'perfil' => route('perfil-artesano'),
+                'subirProducto' => route('subir-producto'),
+                'blog' => route('blog'),
+                'contacto' => route('contacto'),
+                'nosotros' => route('sobre-nosotros'),
+            ],
+        ]);
+    }
+}

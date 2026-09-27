@@ -1,81 +1,39 @@
 <?php
 
+use App\Http\Controllers\ArtesanoController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CatalogoController;
+use App\Http\Controllers\ContenidoController;
+use App\Http\Controllers\InicioController;
+use App\Http\Controllers\TiendaController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('Inicio');
-});
+Route::get('/', [InicioController::class, 'index'])->name('inicio');
+Route::get('/inicio', [InicioController::class, 'index']);
 
-Route::get('/acceso', function () {
-    return view('Acceso');
-});
+Route::get('/categorias', [CatalogoController::class, 'categorias'])->name('categorias');
+Route::get('/bisuteria', [CatalogoController::class, 'bisuteria'])->name('bisuteria');
+Route::get('/ceramica', [CatalogoController::class, 'ceramica'])->name('ceramica');
+Route::get('/mascaras', [CatalogoController::class, 'mascaras'])->name('mascaras');
 
-Route::get('/bisuteria', function () {
-    return view('Bisuteria');
-});
+Route::get('/mostrarproducto', [CatalogoController::class, 'mostrarProducto'])->name('mostrar-producto');
+Route::get('/mostrarbisuteria', [CatalogoController::class, 'mostrarBisuteria'])->name('mostrar-bisuteria');
+Route::get('/mostrarceramica', [CatalogoController::class, 'mostrarCeramica'])->name('mostrar-ceramica');
+Route::get('/mostrarmascaras', [CatalogoController::class, 'mostrarMascaras'])->name('mostrar-mascaras');
 
-Route::get('/bloghistoria', function () {
-    return view('bloghistoria');
-});
+Route::get('/carritoartesano', [TiendaController::class, 'carrito'])->name('carrito');
+Route::get('/pagar', [TiendaController::class, 'pagar'])->name('pagar');
 
-Route::get('/carritoartesano', function () {
-    return view('Carritoartesano');
-});
+Route::get('/acceso', [AuthController::class, 'acceso'])->name('acceso');
+Route::post('/acceso', [AuthController::class, 'login'])->name('login');
+Route::get('/registrousuario', [AuthController::class, 'registro'])->name('registro');
+Route::post('/registrousuario', [AuthController::class, 'registrar'])->name('registrar');
 
-Route::get('/categorias', function () {
-    return view('Categorias');
-});
+Route::get('/perfilartesano', [ArtesanoController::class, 'perfil'])->name('perfil-artesano');
+Route::get('/subirproducto', [ArtesanoController::class, 'subirProducto'])->name('subir-producto');
+Route::post('/subirproducto', [ArtesanoController::class, 'guardarProducto'])->name('guardar-producto');
 
-Route::get('/ceramica', function () {
-    return view('Ceramica');
-});
-
-Route::get('/contacto', function () {
-    return view('Contacto');
-});
-
-Route::get('/inicio', function () {
-    return view('Inicio');
-});
-
-Route::get('/mascaras', function () {
-    return view('Mascaras');
-});
-
-Route::get('/mostrarbisuteria', function () {
-    return view('MostrarBisuteria');
-});
-
-Route::get('/mostrarceramica', function () {
-    return view('MostrarCeramica');
-});
-
-Route::get('/mostrarmascaras', function () {
-    return view('MostrarMascaras');
-});
-
-Route::get('/mostrarproducto', function () {
-    return view('MostrarProducto');
-});
-
-Route::get('/pagar', function () {
-    return view('Pagar');
-});
-
-Route::get('/perfilartesano', function () {
-    return view('PerfilArtesano');
-});
-
-Route::get('/registrousuario', function () {
-    return view('RegistroUsuario');
-});
-
-Route::get('/sobrenosotros', function () {
-    return view('SobreNosotros');
-});
-
-Route::get('/subirproducto', function () {
-    return view('Subirproducto');
-});
-
-
+Route::get('/bloghistoria', [ContenidoController::class, 'blog'])->name('blog');
+Route::get('/contacto', [ContenidoController::class, 'contacto'])->name('contacto');
+Route::post('/contacto', [ContenidoController::class, 'enviarMensaje'])->name('contacto.enviar');
+Route::get('/sobrenosotros', [ContenidoController::class, 'sobreNosotros'])->name('sobre-nosotros');

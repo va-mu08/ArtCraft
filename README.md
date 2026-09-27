@@ -1,59 +1,158 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Art Craft
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Marketplace de artesanías colombianas developed with **Laravel 12** (backend + Blade) and **React 19** (home page).
 
-## About Laravel
+The project lives inside XAMPP (`C:\xampp\htdocs\artcraft`) and uses the MySQL database `artcraft`.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 1. Requisitos
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| Herramienta | Versión |
+|---|---|
+| PHP | 8.2 o superior (la de XAMPP) |
+| Composer | 2.x |
+| Node.js | 18 o superior |
+| MySQL | el de XAMPP (puerto 3306, usuario `root` sin contraseña) |
 
-## Learning Laravel
+## 2. Puesta en marcha (primera vez)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+```bash
+composer install
+copy .env.example .env          # en Windows: copy .env.example .env
+php artisan key:generate
+php artisan migrate --seed      # crea las tablas y los 24 productos de ejemplo
+npm install
+npm run build                   # compila los assets (incluye la portada en React)
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+La base de datos `artcraft` se puede crear desde phpMyAdmin o con:
 
-## Laravel Sponsors
+```sql
+CREATE DATABASE artcraft CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 3. Cómo abrir la página
 
-### Premium Partners
+**Opción A — XAMPP (la que se usa en la presentación)**
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+1. Abre el **Panel de Control de XAMPP**.
+2. Inicia **Apache** y **MySQL**.
+3. Entra en <http://localhost/artcraft/public>.
 
-## Contributing
+**Opción B — Servidor de Laravel**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+php artisan serve
+```
 
-## Code of Conduct
+Entra en <http://127.0.0.1:8000>.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+> Las rutas de los assets se generan con `URL::forceRootUrl()` (`app/Providers/AppServiceProvider.php`), por eso el proyecto funciona
+> en la subcarpeta de XAMPP y también con `artisan serve` sin cambiar nada.
 
-## Security Vulnerabilities
+## 4. Desarrollo con recarga automática
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+npm run dev      # servidor de Vite con Hot Module Replacement
+php artisan serve
+```
 
-## License
+Al terminar la presentación hay que dejar los assets compilados otra vez: `npm run build`.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 5. Estructura del proyecto
+
+```
+app/
+  Http/Controllers/
+    InicioController.php      -> portada (React)
+    CatalogoController.php    -> categorías y fichas de producto
+    ArtesanoController.php    -> perfil del artesano y subir producto
+    TiendaController.php      -> carrito y pago
+    AuthController.php        -> acceso y registro
+    ContenidoController.php   -> blog, contacto y nosotros
+  Models/Producto.php         -> modelo Eloquent del catálogo
+
+database/
+  migrations/..._create_productos_table.php
+  seeders/ProductoSeeder.php  -> 24 productos (mochilas, bisutería, cerámica, máscaras)
+
+resources/
+  views/
+    layouts/app.blade.php     -> layout común (@yield, @stack, @include)
+    partials/
+      header.blade.php        -> barra de navegación compartida
+      footer.blade.php        -> pie de página compartido
+      tabs-categorias.blade.php
+      grid-productos.blade.php-> grilla que recorre $productos
+    inicio.blade.php          -> contenedor de React (#artcraft-inicio)
+    <paginas>.blade.php       -> acceso, carrito, ceramic, mostrar-*, etc.
+  js/
+    inicio.jsx                -> punto de entrada de React
+    inicio/
+      App.jsx  Navbar.jsx  Hero.jsx  Destacados.jsx  Footer.jsx
+  css/app.css                 -> Tailwind (utilidades, sin preflight)
+
+public/
+  css/    -> estilos (base.css, inicio.css, componentes.css, css de cada página)
+  imagenes/-> imágenes del sitio
+  build/  -> assets compilados por Vite
+```
+
+## 6. Rutas del sitio
+
+| Ruta | Vista | Nombre de la ruta |
+|---|---|---|
+| `/` , `/inicio` | Portada en React | `inicio` |
+| `/categorias` | Catálogo de mochilas | `categorias` |
+| `/bisuteria` | Catálogo de bisutería | `bisuteria` |
+| `/ceramica` | Catálogo de cerámica | `ceramica` |
+| `/mascaras` | Catálogo de máscaras | `mascaras` |
+| `/mostrarproducto` | Fichas de las mochilas | `mostrar-producto` |
+| `/mostrarbisuteria` | Fichas de bisutería | `mostrar-bisuteria` |
+| `/mostrarceramica` | Fichas de cerámica | `mostrar-ceramica` |
+| `/mostrarmascaras` | Fichas de máscaras | `mostrar-mascaras` |
+| `/carritoartesano` | Carrito | `carrito` |
+| `/pagar` | Pago | `pagar` |
+| `/acceso` | Iniciar sesión | `acceso` |
+| `/registrousuario` | Registro | `registro` |
+| `/perfilartesano` | Perfil del artesano | `perfil-artesano` |
+| `/subirproducto` | Subir producto | `subir-producto` |
+| `/bloghistoria` | Blog e historias | `blog` |
+| `/contacto` | Contacto y soporte | `contacto` |
+| `/sobrenosotros` | Sobre nosotros | `sobre-nosotros` |
+
+Todas las páginas se enlazan con `route('nombre')`; ya no existen archivos `.html`.
+
+## 7. La portada en React
+
+`InicioController` consulta los productos marcados como `destacado` y se los entrega a la vista
+como JSON (`data-destacados`, `data-categorias`, `data-urls`). `resources/js/inicio.jsx` monta
+React en `#artcraft-inicio` y la interfaz se separa en componentes:
+
+- `Navbar` — buscador (filtra los destacados en vivo), menú lateral desplegable y contador del carrito.
+- `Hero` — banner principal.
+- `Destacados` — filtros por categoría, precio formateado y botón «Agregar» que suma al carrito.
+- `Footer` — pie de página con redes y métodos de pago.
+
+El estado vive en `App.jsx` con `useState` y la búsqueda usa `useMemo`.
+
+## 8. Base de datos
+
+La tabla `productos` guarda: `nombre`, `descripcion`, `categoria`, `precio`, `imagen`, `ruta_detalle`
+y `destacado`. Para recargar los datos de ejemplo:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+## 9. Problemas frecuentes
+
+| Síntoma | Solución |
+|---|---|
+| Pantalla en blanco con «Base de datos» | Inicia MySQL en XAMPP y ejecuta `php artisan migrate --seed`. |
+| No carga el CSS/JS (página sin estilos) | Ejecuta `npm run build`. |
+| Cambiaste React y no se ve | `npm run build` otra vez, o usa `npm run dev`. |
+| `419 Page Expired` al enviar un formulario | Los formularios ya llevan `@csrf`; no edites el token a mano. |
