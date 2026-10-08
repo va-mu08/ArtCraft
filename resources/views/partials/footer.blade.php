@@ -11,9 +11,9 @@
         <div class="box">
             <h2>SÍGUENOS</h2>
             <div class="red-social">
-                <a href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" data-turbo="false" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" data-turbo="false" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" data-turbo="false" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
             </div>
         </div>
 
@@ -27,10 +27,10 @@
         <div class="box">
             <h2>MÉTODOS DE PAGO</h2>
             <div class="red-pagos">
-                <a href="#" title="Visa"><i class="fa-brands fa-cc-visa"></i></a>
-                <a href="#" title="Mastercard"><i class="fa-brands fa-cc-mastercard"></i></a>
-                <a href="#" class="nequi" title="Nequi">N</a>
-                <a href="#" title="PSE"><i class="fa-solid fa-building-columns"></i></a>
+                <a href="#" data-turbo="false" title="Visa"><i class="fa-brands fa-cc-visa"></i></a>
+                <a href="#" data-turbo="false" title="Mastercard"><i class="fa-brands fa-cc-mastercard"></i></a>
+                <a href="#" data-turbo="false" class="nequi" title="Nequi">N</a>
+                <a href="#" data-turbo="false" title="PSE"><i class="fa-solid fa-building-columns"></i></a>
             </div>
         </div>
     </div>

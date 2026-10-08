@@ -18,7 +18,7 @@ class InicioController extends Controller
                 'categoria' => $producto->categoria,
                 'precio' => $producto->precio,
                 'imagen' => $producto->imagen_url,
-                'url' => route($producto->ruta_detalle),
+                'url' => $producto->url,
             ])
             ->values();
 
@@ -30,6 +30,7 @@ class InicioController extends Controller
                 'inicio' => route('inicio'),
                 'categorias' => route('categorias'),
                 'carrito' => route('carrito'),
+                'carritoAgregar' => route('carrito.agregar'),
                 'perfil' => route('perfil-artesano'),
                 'subirProducto' => route('subir-producto'),
                 'blog' => route('blog'),

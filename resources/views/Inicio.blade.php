@@ -13,6 +13,7 @@
     data-destacados="{{ json_encode($destacados) }}"
     data-categorias="{{ json_encode($categorias) }}"
     data-urls="{{ json_encode($urls) }}"
+    data-carrito-ids="{{ json_encode(array_keys(session('carrito', []))) }}"
 >
     <noscript>
         <p class="alerta">Esta portada necesita JavaScript activado para funcionar.</p>

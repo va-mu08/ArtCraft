@@ -14,22 +14,23 @@
         </form>
 
         <div class="nav-icons">
-            <a href="{{ route('inicio') }}">Inicio</a>
-
             <a href="{{ route('perfil-artesano') }}" title="Mi perfil">
                 <i class="fa-solid fa-user"></i>
             </a>
 
-            <a href="#" title="Notificaciones">
+            <a href="#" data-turbo="false" title="Notificaciones">
                 <i class="fa-solid fa-bell"></i>
             </a>
 
-            <a href="{{ route('carrito') }}" title="Carrito de compras">
+            <a href="{{ route('carrito') }}" title="Carrito de compras" class="carrito-icono">
                 <i class="fa-solid fa-cart-shopping"></i>
+                @if (session('carrito') && array_sum(session('carrito')) > 0)
+                    <span class="contador-carrito">{{ array_sum(session('carrito')) }}</span>
+                @endif
             </a>
 
             <div class="menu-container">
-                <a href="#" class="btn-menu" title="Menú">
+                <a href="#" data-turbo="false" class="btn-menu" title="Menú">
                     <i class="fa-solid fa-bars"></i>
                 </a>
 

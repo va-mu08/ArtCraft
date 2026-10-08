@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Producto;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class CatalogoController extends Controller
@@ -44,24 +45,45 @@ class CatalogoController extends Controller
         ]);
     }
 
-    public function mostrarProducto(): View
+    public function mostrarProducto(Producto $producto): View
     {
-        return view('mostrar-producto');
+        return $this->detalle($producto, 'mostrar-producto', 'categorias');
     }
 
-    public function mostrarBisuteria(): View
+    public function mostrarBisuteria(Producto $producto): View
     {
-        return view('mostrar-bisuteria');
+        return $this->detalle($producto, 'mostrar-bisuteria', 'bisuteria');
     }
 
-    public function mostrarCeramica(): View
+    public function mostrarCeramica(Producto $producto): View
     {
-        return view('mostrar-ceramica');
+        return $this->detalle($producto, 'mostrar-ceramica', 'ceramica');
     }
 
-    public function mostrarMascaras(): View
+    public function mostrarMascaras(Producto $producto): View
     {
-        return view('mostrar-mascaras');
+        return $this->detalle($producto, 'mostrar-mascaras', 'mascaras');
+    }
+
+    /** Entra a /mostrarproducto sin id: manda al primer producto de la categoría. */
+    public function mostrarProductoPorDefecto(Request $request): RedirectResponse
+    {
+        $producto = Producto::deCategoria($request->route('categoria'))->first()
+            ?? Producto::query()->first();
+
+        if (! $producto) {
+            return redirect()->route('categorias');
+        }
+
+        return redirect()->route($request->route('ruta'), $producto);
+    }
+
+    private function detalle(Producto $producto, string $vista, string $rutaVolver): View
+    {
+        return view($vista, [
+            'producto' => $producto,
+            'rutaVolver' => $rutaVolver,
+        ]);
     }
 
     private function productos(string $categoria, ?string $busqueda = null)

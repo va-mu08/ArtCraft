@@ -1,20 +1,55 @@
 import { createRoot } from 'react-dom/client';
-import App from './inicio/App';
+import App from './components/App';
 
-const contenedor = document.getElementById('artcraft-inicio');
+const ID_CONTENEDOR = 'artcraft-inicio';
 
-const leerDato = (atributo, valorInicial) => {
-    try {
-        return JSON.parse(contenedor.dataset[atributo]) ?? valorInicial;
-    } catch {
-        return valorInicial;
+let raiz = null;
+let nodoMontado = null;
+
+const leerDatos = () => {
+    const contenedor = document.getElementById(ID_CONTENEDOR);
+
+    const leer = (atributo, valorInicial) => {
+        try {
+            return JSON.parse(contenedor.dataset[atributo]) ?? valorInicial;
+        } catch {
+            return valorInicial;
+        }
+    };
+
+    return {
+        destacados: leer('destacados', []),
+        categorias: leer('categorias', []),
+        urls: leer('urls', {}),
+    };
+};
+
+const montar = () => {
+    const contenedor = document.getElementById(ID_CONTENEDOR);
+
+    if (!contenedor || contenedor === nodoMontado) {
+        return;
     }
+
+    if (raiz) {
+        raiz.unmount();
+    }
+
+    raiz = createRoot(contenedor);
+    raiz.render(<App {...leerDatos()} />);
+    nodoMontado = contenedor;
 };
 
-const props = {
-    destacados: leerDato('destacados', []),
-    categorias: leerDato('categorias', []),
-    urls: leerDato('urls', {}),
+const desmontar = () => {
+    if (raiz) {
+        raiz.unmount();
+    }
+
+    raiz = null;
+    nodoMontado = null;
 };
 
-createRoot(contenedor).render(<App {...props} />);
+montar();
+
+document.addEventListener('turbo:load', montar);
+document.addEventListener('turbo:before-cache', desmontar);

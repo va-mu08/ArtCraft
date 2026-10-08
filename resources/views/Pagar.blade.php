@@ -31,25 +31,47 @@
 
   <section class="order-summary">
     <h2>Tu pedido</h2>
+
+    @if (session('mensaje'))
+      <p class="alerta alerta-exito">{{ session('mensaje') }}</p>
+    @endif
+
     <table>
       <tr>
         <th>Producto</th>
+        <th>Cant.</th>
         <th>Subtotal</th>
       </tr>
-      <tr>
-        <td>Producto seleccionado × 1</td>
-        <td>$</td>
-      </tr>
+
+      @forelse ($filas as $fila)
+        <tr>
+          <td>{{ $fila['producto']->nombre }}</td>
+          <td>{{ $fila['cantidad'] }}</td>
+          <td>$ {{ number_format($fila['total'], 0, ',', '.') }}</td>
+        </tr>
+      @empty
+        <tr>
+          <td colspan="3">No has agregado productos todavía.</td>
+        </tr>
+      @endforelse
+
       <tr>
         <td>Subtotal</td>
-        <td>$</td>
+        <td></td>
+        <td>$ {{ number_format($subtotal, 0, ',', '.') }}</td>
       </tr>
       <tr>
         <td>Envío</td>
-        <td>Gratuito</td>
+        <td></td>
+        <td>$ {{ number_format($envio, 0, ',', '.') }}</td>
       </tr>
     </table>
-    <p class="total">Total: $</p>
+
+    <p class="total">Total a pagar: $ {{ number_format($total, 0, ',', '.') }}</p>
+
+    @unless ($filas)
+      <a href="{{ route('categorias') }}" class="volcar-carrito">Ver productos</a>
+    @endunless
 
     <div class="payment-methods">
       <h3>Método de pago</h3>
@@ -103,7 +125,7 @@
 
       </div>
 
-      <button class="pay-btn">Realizar el pedido</button>
+      <button class="pay-btn" type="button">Realizar el pedido</button>
     </div>
   </section>
 @endsection

@@ -13,11 +13,11 @@
         <h2>Acceder</h2>
 
         @if (session('mensaje'))
-            <p class="alerta">{{ session('mensaje') }}</p>
+<p class="alerta alerta-exito">{{ session('mensaje') }}</p>
         @endif
 
         @if ($errors->any())
-            <ul class="alerta">
+            <ul class="errores">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -40,7 +40,7 @@
 
             <div class="extras">
                 <label><input type="checkbox" name="recordarme"> Recordarme</label>
-                <a href="#">¿Perdiste tu clave?</a>
+                <a href="#" data-turbo="false">¿Perdiste tu clave?</a>
             </div>
 
             <div class="social-login">

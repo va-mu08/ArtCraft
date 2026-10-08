@@ -6,7 +6,7 @@
             <p class="nombre-producto">{{ $producto->nombre }}</p>
             <p class="precio-producto">$ {{ number_format($producto->precio, 0, ',', '.') }}</p>
 
-            <a href="{{ route($producto->ruta_detalle) }}#producto{{ $indice + 1 }}" class="btn-mostrar">
+            <a href="{{ route($producto->ruta_detalle, $producto) }}" class="btn-mostrar">
                 Mostrar
             </a>
         </div>

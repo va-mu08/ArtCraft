@@ -10,7 +10,7 @@ export default function Footer({ urls }) {
             <div className="grupo-1">
                 <div className="box">
                     <figure>
-                        <a href={urls.inicio}>
+                        <a href={urls.inicio} title="Art Craft">
                             <img src={`${urls.base}/imagenes/Logo-footer.png`} alt="Logo de Art Craft" />
                         </a>
                     </figure>
@@ -20,7 +20,7 @@ export default function Footer({ urls }) {
                     <h2>SÍGUENOS</h2>
                     <div className="red-social">
                         {REDES.map(([icono, nombre]) => (
-                            <a key={nombre} href="#" title={nombre}>
+                            <a key={nombre} href="#" data-turbo="false" title={nombre}>
                                 <i className={`fa-brands ${icono}`}></i>
                             </a>
                         ))}
@@ -43,16 +43,16 @@ export default function Footer({ urls }) {
                 <div className="box">
                     <h2>MÉTODOS DE PAGO</h2>
                     <div className="red-pagos">
-                        <a href="#" title="Visa">
+                        <a href="#" data-turbo="false" title="Visa">
                             <i className="fa-brands fa-cc-visa"></i>
                         </a>
-                        <a href="#" title="Mastercard">
+                        <a href="#" data-turbo="false" title="Mastercard">
                             <i className="fa-brands fa-cc-mastercard"></i>
                         </a>
-                        <a href="#" className="nequi" title="Nequi">
+                        <a href="#" data-turbo="false" className="nequi" title="Nequi">
                             N
                         </a>
-                        <a href="#" title="PSE">
+                        <a href="#" data-turbo="false" title="PSE">
                             <i className="fa-solid fa-building-columns"></i>
                         </a>
                     </div>

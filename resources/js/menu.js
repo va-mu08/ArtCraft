@@ -1,21 +1,31 @@
-const botonMenu = document.querySelector('.menu-container .btn-menu');
-const menuLateral = document.querySelector('.menu-lateral');
+const inicializarMenu = () => {
+    const contenedor = document.querySelector('.menu-container');
+    const boton = contenedor?.querySelector('.btn-menu');
 
-if (botonMenu && menuLateral) {
-    botonMenu.addEventListener('click', (evento) => {
+    if (!contenedor || !boton || boton.dataset.menuListo === 'si') {
+        return;
+    }
+
+    boton.dataset.menuListo = 'si';
+
+    boton.addEventListener('click', (evento) => {
         evento.preventDefault();
-        botonMenu.parentElement.classList.toggle('activo');
+        contenedor.classList.toggle('activo');
     });
 
     document.addEventListener('click', (evento) => {
-        if (!menuLateral.parentElement.contains(evento.target)) {
-            menuLateral.parentElement.classList.remove('activo');
+        if (!contenedor.contains(evento.target)) {
+            contenedor.classList.remove('activo');
         }
     });
 
     document.addEventListener('keydown', (evento) => {
         if (evento.key === 'Escape') {
-            menuLateral.parentElement.classList.remove('activo');
+            contenedor.classList.remove('activo');
         }
     });
-}
+};
+
+inicializarMenu();
+
+document.addEventListener('turbo:load', inicializarMenu);

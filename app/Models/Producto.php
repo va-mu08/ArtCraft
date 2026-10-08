@@ -32,6 +32,16 @@ class Producto extends Model
         return asset('imagenes/'.$this->imagen);
     }
 
+    public function getPrecioFormateadoAttribute(): string
+    {
+        return '$ '.number_format($this->precio, 0, ',', '.');
+    }
+
+    public function getUrlAttribute(): string
+    {
+        return route($this->ruta_detalle, $this);
+    }
+
     public function scopeDestacados($query)
     {
         return $query->where('destacado', true);

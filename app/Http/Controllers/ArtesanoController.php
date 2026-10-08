@@ -23,7 +23,7 @@ class ArtesanoController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:120',
             'categoria' => 'required|string|max:60',
-            'precio' => 'required|numeric|min:0',
+            'precio' => 'required|numeric|min:1',
         ]);
 
         return back()->with('mensaje', 'Producto registrado en la demo de Art Craft.');

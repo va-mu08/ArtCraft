@@ -310,6 +310,27 @@ header {
   padding: 30px 0;
 }
 
+.carrito-icono {
+  position: relative;
+}
+
+.contador-carrito {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  border-radius: 50%;
+  background: #ffb12d;
+  color: #351019;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .alerta {
   margin: 20px auto;
   max-width: 700px;
@@ -320,6 +341,25 @@ header {
   color: #7a1c0b;
   font-weight: bold;
   text-align: center;
+}
+
+.alerta-exito {
+  border-left-color: #2e7d32;
+  color: #1b5e20;
+}
+
+.errores {
+  margin: 20px auto;
+  max-width: 700px;
+  padding: 14px 20px 14px 40px;
+  border-radius: 10px;
+  background: #fdecea;
+  border-left: 6px solid #b71c1c;
+  color: #7a1c0b;
+}
+
+.errores li {
+  margin: 4px 0;
 }
 
 @media screen and (max-width: 900px) {

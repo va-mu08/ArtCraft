@@ -11,11 +11,11 @@
 <p class="subtitulo">¡Estamos aquí para ayudarte!</p>
 
 @if (session('mensaje'))
-    <p class="alerta">{{ session('mensaje') }}</p>
+<p class="alerta alerta-exito">{{ session('mensaje') }}</p>
 @endif
 
 @if ($errors->any())
-    <ul class="alerta">
+    <ul class="errores">
         @foreach ($errors->all() as $error)
             <li>{{ $error }}</li>
         @endforeach

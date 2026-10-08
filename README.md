@@ -1,8 +1,9 @@
 # Art Craft
 
-Marketplace de artesanías colombianas developed with **Laravel 12** (backend + Blade) and **React 19** (home page).
+Marketplace de artesanías colombianas desarrollado con **Laravel 12** (backend + Blade) y **React 19** (portada).
 
-The project lives inside XAMPP (`C:\xampp\htdocs\artcraft`) and uses the MySQL database `artcraft`.
+El proyecto vive dentro de XAMPP (`C:\xampp\htdocs\artcraft`) y usa la base de datos MySQL `artcraft`.
+La navegación entre páginas no recarga el navegador (ver la sección 8).
 
 ---
 
@@ -70,7 +71,7 @@ app/
     InicioController.php      -> portada (React)
     CatalogoController.php    -> categorías y fichas de producto
     ArtesanoController.php    -> perfil del artesano y subir producto
-    TiendaController.php      -> carrito y pago
+    CarritoController.php      -> carrito (sesión) y página de pago
     AuthController.php        -> acceso y registro
     ContenidoController.php   -> blog, contacto y nosotros
   Models/Producto.php         -> modelo Eloquent del catálogo
@@ -87,12 +88,24 @@ resources/
       footer.blade.php        -> pie de página compartido
       tabs-categorias.blade.php
       grid-productos.blade.php-> grilla que recorre $productos
+      detalle-producto.blade.php-> ficha compartida por las cuatro categorías
     inicio.blade.php          -> contenedor de React (#artcraft-inicio)
     <paginas>.blade.php       -> acceso, carrito, ceramic, mostrar-*, etc.
   js/
-    inicio.jsx                -> punto de entrada de React
-    inicio/
-      App.jsx  Navbar.jsx  Hero.jsx  Destacados.jsx  Footer.jsx
+    app.js                     -> entrada común: axios, Turbo y menú lateral
+    menu.js                    -> abre/cierra el menú lateral (clic, no solo hover)
+    inicio.jsx                 -> punto de entrada de la portada en React
+    components/
+      App.jsx                  -> une los componentes y reparte el estado
+      Navbar.jsx               -> logo, buscador, menú y contador del carrito
+      Hero.jsx                 -> banner principal
+      Destacados.jsx           -> filtros por categoría y grilla de productos
+      ProductoCard.jsx         -> tarjeta de un producto
+      Footer.jsx               -> pie de página
+    hooks/
+      useCarrito.js            -> carrito: ids de la sesión + total y alta con fetch
+      useFiltroProductos.js    -> búsqueda + categoría con useMemo
+    utils/formato.js           -> precio con Intl.NumberFormat('es-CO')
   css/app.css                 -> Tailwind (utilidades, sin preflight)
 
 public/
@@ -110,11 +123,15 @@ public/
 | `/bisuteria` | Catálogo de bisutería | `bisuteria` |
 | `/ceramica` | Catálogo de cerámica | `ceramica` |
 | `/mascaras` | Catálogo de máscaras | `mascaras` |
-| `/mostrarproducto` | Fichas de las mochilas | `mostrar-producto` |
-| `/mostrarbisuteria` | Fichas de bisutería | `mostrar-bisuteria` |
-| `/mostrarceramica` | Fichas de cerámica | `mostrar-ceramica` |
-| `/mostrarmascaras` | Fichas de máscaras | `mostrar-mascaras` |
+| `/mostrarproducto/{id}` | Ficha del producto indicado | `mostrar-producto` |
+| `/mostrarbisuteria/{id}` | Ficha de un producto de bisutería | `mostrar-bisuteria` |
+| `/mostrarceramica/{id}` | Ficha de un producto de cerámica | `mostrar-ceramica` |
+| `/mostrarmascaras/{id}` | Ficha de un producto de máscaras | `mostrar-mascaras` |
 | `/carritoartesano` | Carrito | `carrito` |
+| `/carritoartesano/agregar` | Agrega al carrito (POST) | `carrito.agregar` |
+| `/carritoartesano/actualizar` | Cambia la cantidad (POST) | `carrito.actualizar` |
+| `/carritoartesano/quitar` | Quita un producto (POST) | `carrito.quitar` |
+| `/carritoartesano/vaciar` | Vacía el carrito (POST) | `carrito.vaciar` |
 | `/pagar` | Pago | `pagar` |
 | `/acceso` | Iniciar sesión | `acceso` |
 | `/registrousuario` | Registro | `registro` |
@@ -126,20 +143,85 @@ public/
 
 Todas las páginas se enlazan con `route('nombre')`; ya no existen archivos `.html`.
 
+## 6.1 Fichas de producto
+
+Cada ficha recibe el **id** del producto que se quiere ver (`/mostrarproducto/5`), y las cuatro
+vistas `mostrar-*.blade.php` solo delegan en `partials/detalle-producto.blade.php`. Así la imagen,
+el nombre y el precio siempre corresponden al producto del enlace, sin importar desde qué categoría
+se abrió. Si alguien entra a `/mostrarproducto` sin id, la ruta redirige al primer producto de la
+categoría.
+
+## 6.2 Carrito
+
+El carrito vive en la sesión (`session('carrito')`), así que la portada en React y las páginas Blade
+muestran el mismo pedido:
+
+- `POST /carritoartesano/agregar` — recibe `producto_id` y `cantidad`; con `ir_a=pagar` responde
+  mandando a la pantalla de pago («Comprar ahora»).
+- `POST /carritoartesano/actualizar`, `quitar` y `vaciar` — modifican el carrito.
+- `/carritoartesano` y `/pagar` calculan solos el subtotal, el envío ($ 10.000 de la demo) y el total.
+
+`useCarrito` (React) recibe los ids que ya tiene la sesión en `data-carrito-ids` y, al agregar un
+producto desde la portada, los guarda con un `fetch` a `carrito.agregar`.
+
 ## 7. La portada en React
 
 `InicioController` consulta los productos marcados como `destacado` y se los entrega a la vista
-como JSON (`data-destacados`, `data-categorias`, `data-urls`). `resources/js/inicio.jsx` monta
-React en `#artcraft-inicio` y la interfaz se separa en componentes:
+como JSON (`data-destacados`, `data-categorias`, `data-urls`, `data-carrito-ids`). `resources/js/inicio.jsx` monta
+React en `#artcraft-inicio` y la interfaz se separa en componentes dentro de `resources/js/components/`:
 
-- `Navbar` — buscador (filtra los destacados en vivo), menú lateral desplegable y contador del carrito.
+- `App` — une todo y reparte el estado.
+- `Navbar` — logo, buscador (filtra los destacados en vivo), menú lateral y contador del carrito.
 - `Hero` — banner principal.
-- `Destacados` — filtros por categoría, precio formateado y botón «Agregar» que suma al carrito.
+- `Destacados` — filtros por categoría y grilla de productos.
+- `ProductoCard` — tarjeta de un producto (imagen cuadrada, precio y botones).
 - `Footer` — pie de página con redes y métodos de pago.
 
-El estado vive en `App.jsx` con `useState` y la búsqueda usa `useMemo`.
+El estado vive en dos hooks reutilizables: `useCarrito` (lo que hay en el carrito, sincronizado con
+la sesión) y `useFiltroProductos` (búsqueda y categoría, el filtrado va en un `useMemo`).
 
-## 8. Base de datos
+## 8. Navegación sin recargar la página
+
+El proyecto usa **Turbo (Hotwire)**, que se activa en `resources/js/app.js`. Al hacer clic en
+cualquier enlace interno se pide solo el HTML de la página nueva, se reemplaza el contenido y se
+cambia el `<title>`, **sin recargar el navegador completo** (y el botón «atrás» es instantáneo).
+
+Como el bundle de React se carga una sola vez, `inicio.jsx` se monta de nuevo cuando Turbo
+termina de traer la portada:
+
+```js
+document.addEventListener('turbo:load', montar);
+document.addEventListener('turbo:before-cache', desmontar);
+```
+
+Para que un enlace se comporte de forma normal se marca con `data-turbo="false"`; así los botones
+y enlaces que son `href="#"` (redes sociales, métodos de pago, notificaciones, «Eliminar» del
+carrito) no cambian la URL ni disparan una visita.
+
+## 9. Formularios
+
+Los cuatro formularios reales (acceso, registro, contacto y subir producto) reciben los datos,
+**validan en el servidor** y vuelven a la misma página con un mensaje:
+
+- `POST /acceso` y `POST /registrousuario` → `AuthController`
+- `POST /contacto` → `ContenidoController@enviarMensaje`
+- `POST /subirproducto` → `ArtesanoController@guardarProducto`
+
+Los mensajes de validación están en español (`lang/es/validation.php`) y cada vista muestra los
+errores con `@if ($errors->any())`. Los datos de la demo no se guardan: el login es de ejemplo y el
+botón «Realizar el pedido» es solo visual (el carrito sí funciona de verdad).
+
+## 9.1 Pruebas
+
+```bash
+php artisan test
+```
+
+Hay pruebas de la portada, de las fichas de producto (que cada id muestre su propio producto) y del
+carrito (agregar, cambiar cantidad, quitar, vaciar y el total que se ve en `/pagar`). Corre sobre
+SQLite en memoria, así que no tocan la base de datos de la demostración.
+
+## 10. Base de datos
 
 La tabla `productos` guarda: `nombre`, `descripcion`, `categoria`, `precio`, `imagen`, `ruta_detalle`
 y `destacado`. Para recargar los datos de ejemplo:
@@ -148,11 +230,12 @@ y `destacado`. Para recargar los datos de ejemplo:
 php artisan migrate:fresh --seed
 ```
 
-## 9. Problemas frecuentes
+## 11. Problemas frecuentes
 
 | Síntoma | Solución |
 |---|---|
 | Pantalla en blanco con «Base de datos» | Inicia MySQL en XAMPP y ejecuta `php artisan migrate --seed`. |
 | No carga el CSS/JS (página sin estilos) | Ejecuta `npm run build`. |
 | Cambiaste React y no se ve | `npm run build` otra vez, o usa `npm run dev`. |
+| La portada se ve sin estilos al=redimensionar | Haz `Ctrl+F5` para descartar la caché del navegador. |
 | `419 Page Expired` al enviar un formulario | Los formularios ya llevan `@csrf`; no edites el token a mano. |

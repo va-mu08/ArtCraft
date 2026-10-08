@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\ArtesanoController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\ContenidoController;
 use App\Http\Controllers\InicioController;
-use App\Http\Controllers\TiendaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [InicioController::class, 'index'])->name('inicio');
@@ -16,13 +16,22 @@ Route::get('/bisuteria', [CatalogoController::class, 'bisuteria'])->name('bisute
 Route::get('/ceramica', [CatalogoController::class, 'ceramica'])->name('ceramica');
 Route::get('/mascaras', [CatalogoController::class, 'mascaras'])->name('mascaras');
 
-Route::get('/mostrarproducto', [CatalogoController::class, 'mostrarProducto'])->name('mostrar-producto');
-Route::get('/mostrarbisuteria', [CatalogoController::class, 'mostrarBisuteria'])->name('mostrar-bisuteria');
-Route::get('/mostrarceramica', [CatalogoController::class, 'mostrarCeramica'])->name('mostrar-ceramica');
-Route::get('/mostrarmascaras', [CatalogoController::class, 'mostrarMascaras'])->name('mostrar-mascaras');
+Route::get('/mostrarproducto/{producto}', [CatalogoController::class, 'mostrarProducto'])->name('mostrar-producto');
+Route::get('/mostrarbisuteria/{producto}', [CatalogoController::class, 'mostrarBisuteria'])->name('mostrar-bisuteria');
+Route::get('/mostrarceramica/{producto}', [CatalogoController::class, 'mostrarCeramica'])->name('mostrar-ceramica');
+Route::get('/mostrarmascaras/{producto}', [CatalogoController::class, 'mostrarMascaras'])->name('mostrar-mascaras');
 
-Route::get('/carritoartesano', [TiendaController::class, 'carrito'])->name('carrito');
-Route::get('/pagar', [TiendaController::class, 'pagar'])->name('pagar');
+Route::get('/mostrarproducto', [CatalogoController::class, 'mostrarProductoPorDefecto'])->defaults('categoria', 'Mochilas')->defaults('ruta', 'mostrar-producto');
+Route::get('/mostrarbisuteria', [CatalogoController::class, 'mostrarProductoPorDefecto'])->defaults('categoria', 'Bisutería')->defaults('ruta', 'mostrar-bisuteria');
+Route::get('/mostrarceramica', [CatalogoController::class, 'mostrarProductoPorDefecto'])->defaults('categoria', 'Cerámica')->defaults('ruta', 'mostrar-ceramica');
+Route::get('/mostrarmascaras', [CatalogoController::class, 'mostrarProductoPorDefecto'])->defaults('categoria', 'Máscaras')->defaults('ruta', 'mostrar-mascaras');
+
+Route::get('/carritoartesano', [CarritoController::class, 'index'])->name('carrito');
+Route::post('/carritoartesano/agregar', [CarritoController::class, 'agregar'])->name('carrito.agregar');
+Route::post('/carritoartesano/actualizar', [CarritoController::class, 'actualizar'])->name('carrito.actualizar');
+Route::post('/carritoartesano/quitar', [CarritoController::class, 'quitar'])->name('carrito.quitar');
+Route::post('/carritoartesano/vaciar', [CarritoController::class, 'vaciar'])->name('carrito.vaciar');
+Route::get('/pagar', [CarritoController::class, 'pagar'])->name('pagar');
 
 Route::get('/acceso', [AuthController::class, 'acceso'])->name('acceso');
 Route::post('/acceso', [AuthController::class, 'login'])->name('login');
