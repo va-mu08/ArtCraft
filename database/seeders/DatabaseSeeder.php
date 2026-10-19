@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(ProductoSeeder::class);
+        $this->call(AdminSeeder::class);
 
         User::firstOrCreate(
             ['email' => 'test@example.com'],

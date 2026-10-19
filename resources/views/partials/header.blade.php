@@ -3,7 +3,7 @@
 
         <div class="logo">
             <a href="{{ route('inicio') }}" title="Art Craft">
-                <img src="{{ asset('imagenes/logo4.png') }}" alt="Logo de Art Craft">
+                <img src="{{ asset('imagenes/logo-color.png') }}" alt="Logo de Art Craft">
             </a>
         </div>
 
@@ -18,8 +18,12 @@
                 <i class="fa-solid fa-user"></i>
             </a>
 
-            <a href="#" data-turbo="false" title="Notificaciones">
+            <a href="{{ route('notificaciones') }}" title="Notificaciones" class="campana-icono">
                 <i class="fa-solid fa-bell"></i>
+                @php($pendientes = App\Support\Notificaciones::pendientes())
+                @if ($pendientes > 0)
+                    <span class="contador-notificaciones">{{ $pendientes }}</span>
+                @endif
             </a>
 
             <a href="{{ route('carrito') }}" title="Carrito de compras" class="carrito-icono">
@@ -41,6 +45,7 @@
                     <a href="{{ route('contacto') }}">Contacto y soporte</a>
                     <a href="{{ route('sobre-nosotros') }}">Nosotros</a>
                     <a href="{{ route('categorias') }}">Categoría</a>
+                    <a href="{{ route('admin.login') }}">Administrador</a>
                 </div>
             </div>
         </div>

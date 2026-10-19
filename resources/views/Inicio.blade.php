@@ -1,10 +1,10 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('titulo', 'Inicio')
 
 @push('estilos')
-<link rel="stylesheet" href="{{ asset('css/inicio.css') }}">
-<link rel="stylesheet" href="{{ asset('css/componentes.css') }}">
+<link rel="stylesheet" data-turbo-track="dynamic" href="{{ asset('css/inicio.css') }}">
+<link rel="stylesheet" data-turbo-track="dynamic" href="{{ asset('css/componentes.css') }}">
 @endpush
 
 @section('contenido-completo')

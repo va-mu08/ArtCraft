@@ -1,9 +1,9 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('titulo', 'Subir producto')
 
 @push('estilos')
-<link rel="stylesheet" href="{{ asset('css/subir-producto.css') }}">
+<link rel="stylesheet" data-turbo-track="dynamic" href="{{ asset('css/subir-producto.css') }}">
 @endpush
 
 @section('contenido')

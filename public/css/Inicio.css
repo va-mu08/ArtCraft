@@ -116,13 +116,24 @@ body {
 .destacados h2 {
     color: #8b2510;
     font-size: clamp(24px, 4.4vw, 38px);
-    margin-bottom: 8px;
+    margin-bottom: 26px;
+}
+
+.destacados h2::after {
+    content: "";
+    display: block;
+    width: 110px;
+    height: 4px;
+    margin: 14px auto 0;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #f3701a, #ffb12d);
 }
 
 .intro-destacados {
     color: #5a1807;
-    font-size: clamp(15px, 1.8vw, 18px);
-    max-width: 60ch;
+    font-size: clamp(16px, 2vw, 20px);
+    line-height: 1.6;
+    max-width: 52ch;
     margin: 0 auto;
 }
 

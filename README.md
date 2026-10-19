@@ -140,6 +140,13 @@ public/
 | `/bloghistoria` | Blog e historias | `blog` |
 | `/contacto` | Contacto y soporte | `contacto` |
 | `/sobrenosotros` | Sobre nosotros | `sobre-nosotros` |
+| `/notificaciones` | Notificaciones | `notificaciones` |
+| `/notificaciones/leer` | Marca todas como leídas (POST) | `notificaciones.leer` |
+| `/admin` | Inicio de sesión del administrador | `admin.login` |
+| `/admin` (POST) | Valida las credenciales del admin | `admin.ingresar` |
+| `/admin/salir` | Cierra la sesión del admin (POST) | `admin.salir` |
+| `/admin/productos` | Panel para borrar productos | `admin.productos` |
+| `/admin/productos/{id}` | Borra el producto (DELETE) | `admin.eliminar` |
 
 Todas las páginas se enlazan con `route('nombre')`; ya no existen archivos `.html`.
 
@@ -163,6 +170,17 @@ muestran el mismo pedido:
 
 `useCarrito` (React) recibe los ids que ya tiene la sesión en `data-carrito-ids` y, al agregar un
 producto desde la portada, los guarda con un `fetch` a `carrito.agregar`.
+
+## 6.3 Administrador y notificaciones
+
+El menú lateral incluye **Administrador** (`/admin`). Con la cuenta demo
+(`admin@artcraft.com` / `admin12345`) se entra al panel `/admin/productos`, que lista el catálogo y
+permite **borrar productos** con `DELETE /admin/productos/{id}`. El acceso lo controla el middleware
+`auth.admin` (`app/Http/Middleware/EnsureAdmin.php`), que exige una cuenta con `rol = admin`.
+
+La campana del encabezado lleva a `/notificaciones`, que arma el aviso de los últimos productos
+publicados, el estado del carrito y mensajes de ejemplo, y marca todo como leído con
+`POST /notificaciones/leer` (el contador se guarda en la sesión).
 
 ## 7. La portada en React
 
@@ -198,6 +216,11 @@ Para que un enlace se comporte de forma normal se marca con `data-turbo="false"`
 y enlaces que son `href="#"` (redes sociales, métodos de pago, notificaciones, «Eliminar» del
 carrito) no cambian la URL ni disparan una visita.
 
+Cada página tiene su propio CSS (por ejemplo `inicio.css` o `perfil-artesano.css`) cargado con
+`@push('estilos')`. Como Turbo solo elimina las hojas marcadas como **dinámicas**, todas van con
+`data-turbo-track="dynamic"`: así al cambiar de página se quita el CSS anterior y no se «desorganiza»
+el diseño con los estilos de la vista que dejamos atrás.
+
 ## 9. Formularios
 
 Los cuatro formularios reales (acceso, registro, contacto y subir producto) reciben los datos,
@@ -217,14 +240,16 @@ botón «Realizar el pedido» es solo visual (el carrito sí funciona de verdad)
 php artisan test
 ```
 
-Hay pruebas de la portada, de las fichas de producto (que cada id muestre su propio producto) y del
-carrito (agregar, cambiar cantidad, quitar, vaciar y el total que se ve en `/pagar`). Corre sobre
-SQLite en memoria, así que no tocan la base de datos de la demostración.
+Hay pruebas de la portada, de las fichas de producto (que cada id muestre su propio producto), del
+carrito (agregar, cambiar cantidad, quitar, vaciar y el total que se ve en `/pagar`), del panel de
+administrador (ingreso, borrado de productos y bloqueo a quien no es admin) y de las notificaciones.
+Corre sobre SQLite en memoria, así que no tocan la base de datos de la demostración.
 
 ## 10. Base de datos
 
 La tabla `productos` guarda: `nombre`, `descripcion`, `categoria`, `precio`, `imagen`, `ruta_detalle`
-y `destacado`. Para recargar los datos de ejemplo:
+y `destacado`. La tabla `users` incluye `rol` (`artesano` por defecto; `admin` da acceso al panel).
+Para recargar los datos de ejemplo (incluida la cuenta `admin@artcraft.com` / `admin12345`):
 
 ```bash
 php artisan migrate:fresh --seed

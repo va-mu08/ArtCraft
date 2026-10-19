@@ -1,9 +1,9 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('titulo', 'Contacto y soporte')
 
 @push('estilos')
-<link rel="stylesheet" href="{{ asset('css/contacto.css') }}">
+<link rel="stylesheet" data-turbo-track="dynamic" href="{{ asset('css/contacto.css') }}">
 @endpush
 
 @section('contenido')

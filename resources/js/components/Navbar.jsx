@@ -7,6 +7,7 @@ const ENLACES_MENU = [
     ['Contacto y soporte', 'contacto'],
     ['Nosotros', 'nosotros'],
     ['Categoría', 'categorias'],
+    ['Administrador', 'admin'],
 ];
 
 export default function Navbar({ urls, busqueda, onBusqueda, totalCarrito }) {
@@ -19,7 +20,7 @@ export default function Navbar({ urls, busqueda, onBusqueda, totalCarrito }) {
             <nav className="navbar">
                 <div className="logo">
                     <a href={urls.inicio} title="Art Craft">
-                        <img src={`${urls.base}/imagenes/logo4.png`} alt="Logo de Art Craft" />
+                        <img src={`${urls.base}/imagenes/logo-color.png`} alt="Logo de Art Craft" />
                     </a>
                 </div>
 
@@ -40,7 +41,7 @@ export default function Navbar({ urls, busqueda, onBusqueda, totalCarrito }) {
                         <i className="fa-solid fa-user"></i>
                     </a>
 
-                    <a href="#" data-turbo="false" title="Notificaciones">
+                    <a href={urls.notificaciones} title="Notificaciones">
                         <i className="fa-solid fa-bell"></i>
                     </a>
 

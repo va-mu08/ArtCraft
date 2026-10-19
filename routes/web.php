@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArtesanoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\ContenidoController;
 use App\Http\Controllers\InicioController;
+use App\Http\Controllers\NotificacionesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [InicioController::class, 'index'])->name('inicio');
@@ -46,3 +48,15 @@ Route::get('/bloghistoria', [ContenidoController::class, 'blog'])->name('blog');
 Route::get('/contacto', [ContenidoController::class, 'contacto'])->name('contacto');
 Route::post('/contacto', [ContenidoController::class, 'enviarMensaje'])->name('contacto.enviar');
 Route::get('/sobrenosotros', [ContenidoController::class, 'sobreNosotros'])->name('sobre-nosotros');
+
+Route::get('/notificaciones', [NotificacionesController::class, 'index'])->name('notificaciones');
+Route::post('/notificaciones/leer', [NotificacionesController::class, 'marcarLeidas'])->name('notificaciones.leer');
+
+Route::get('/admin', [AdminController::class, 'login'])->name('admin.login');
+Route::post('/admin', [AdminController::class, 'ingresar'])->name('admin.ingresar');
+Route::post('/admin/salir', [AdminController::class, 'salir'])->name('admin.salir');
+
+Route::middleware('auth.admin')->group(function () {
+    Route::get('/admin/productos', [AdminController::class, 'productos'])->name('admin.productos');
+    Route::delete('/admin/productos/{producto}', [AdminController::class, 'eliminar'])->name('admin.eliminar');
+});

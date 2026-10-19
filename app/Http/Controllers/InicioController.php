@@ -36,6 +36,8 @@ class InicioController extends Controller
                 'blog' => route('blog'),
                 'contacto' => route('contacto'),
                 'nosotros' => route('sobre-nosotros'),
+                'notificaciones' => route('notificaciones'),
+                'admin' => route('admin.login'),
             ],
         ]);
     }
