@@ -3,7 +3,7 @@
 @section('titulo', 'Panel de administración')
 
 @push('estilos')
-<link rel="stylesheet" data-turbo-track="dynamic" href="{{ asset('css/admin.css') }}">
+<link rel="stylesheet" data-turbo-track="dynamic" href="{{ asset('css/admin.css') }}?v={{ filemtime(public_path('css/admin.css')) }}">
 @endpush
 
 @section('contenido')

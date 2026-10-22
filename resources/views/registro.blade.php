@@ -3,7 +3,7 @@
 @section('titulo', 'Registro de usuario')
 
 @push('estilos')
-<link rel="stylesheet" data-turbo-track="dynamic" href="{{ asset('css/registro.css') }}">
+<link rel="stylesheet" data-turbo-track="dynamic" href="{{ asset('css/registro.css') }}?v={{ filemtime(public_path('css/registro.css')) }}">
 @endpush
 
 @section('contenido')

@@ -3,7 +3,7 @@
 @section('titulo', 'Notificaciones')
 
 @push('estilos')
-<link rel="stylesheet" data-turbo-track="dynamic" href="{{ asset('css/notificaciones.css') }}">
+<link rel="stylesheet" data-turbo-track="dynamic" href="{{ asset('css/notificaciones.css') }}?v={{ filemtime(public_path('css/notificaciones.css')) }}">
 @endpush
 
 @section('contenido')

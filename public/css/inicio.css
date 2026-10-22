@@ -164,12 +164,6 @@ body {
 
 /* ------------------------------ RESPONSIVE ------------------------------ */
 
-@media (max-width: 900px) {
-    .pie-pagina .grupo-1 .box figure img {
-        width: 220px;
-    }
-}
-
 @media (max-width: 640px) {
     .hero {
         min-height: 320px;

@@ -3,7 +3,7 @@
 @section('titulo', 'Subir producto')
 
 @push('estilos')
-<link rel="stylesheet" data-turbo-track="dynamic" href="{{ asset('css/subir-producto.css') }}">
+<link rel="stylesheet" data-turbo-track="dynamic" href="{{ asset('css/subir-producto.css') }}?v={{ filemtime(public_path('css/subir-producto.css')) }}">
 @endpush
 
 @section('contenido')
